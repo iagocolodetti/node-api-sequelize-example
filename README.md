@@ -8,5 +8,5 @@ Exemplo simples de CRUD API utilizando banco de dados MySQL e Sequelize com Node
 - Delete -> DELETE /contatos/id
 
 * Downloads: https://github.com/iagocolodetti/node-api-sequelize-example/releases
-   * [Arquivo de Script MySQL](https://github.com/iagocolodetti/node-api-sequelize-example/releases/download/v1.0/contatodb.sql "contatodb.sql")
-   * [Código-Fonte](https://github.com/iagocolodetti/node-api-sequelize-example/archive/v1.0.zip "v1.0.zip")
+   * [Arquivo de Script MySQL](https://github.com/iagocolodetti/node-api-sequelize-example/releases/download/v1.1/contatodb.sql "contatodb.sql")
+   * [Código-Fonte](https://github.com/iagocolodetti/node-api-sequelize-example/archive/v1.1.zip "v1.1.zip")
