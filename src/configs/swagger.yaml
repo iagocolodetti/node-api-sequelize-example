@@ -1,0 +1,284 @@
+openapi: '3.0.2'
+info:
+  title: node-api-sequelize-example
+  description: Exemplo simples de CRUD API utilizando banco de dados MySQL e Sequelize com Node.js
+  version: '1.3'
+  contact:
+    name: Iago Colodetti
+    url: https://github.com/iagocolodetti
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: Contato
+    description: REST API para Contato
+
+components:
+  schemas:
+    Contato:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int
+          example: 1
+          description: ID do contato
+        nome:
+          type: string
+          example: Nome
+          description: Nome do contato
+        telefone:
+          type: string
+          example: '2222-2222'
+          description: Telefone do contato
+        email:
+          type: string
+          example: nome@email.com
+          description: Email do contato
+
+    Sucesso:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int
+          example: 200
+          description: Código de retorno
+        message:
+          type: string
+          example: ... com sucesso.
+          description: Mensagem de sucesso
+
+    Erro:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2020-01-01T12:00:00.000Z'
+          description: Data do erro
+        status:
+          type: integer
+          format: int
+          example: 500
+          description: Código do erro
+        erro:
+          type: string
+          example: Internal Server Erro
+          description: Nome do erro
+        message:
+          type: string
+          example: Não foi possível ...
+          description: Mensagem de erro
+        path:
+          type: string
+          example: /exemplo
+          description: Caminho usado
+        method:
+          type: string
+          example: POST
+          description: Método usado
+
+  examples:
+    NovoContato:
+      value:
+        nome: Nome
+        telefone: '2222-2222'
+        email: nome@email.com
+      summary: Novo Contato
+
+    RetornoContato:
+      value:
+        id: 1
+        nome: Nome
+        telefone: '2222-2222'
+        email: nome@email.com
+      summary: Retorno de Contato
+
+    RetornoContatos:
+      value:
+        - id: 1
+          nome: Nome
+          telefone: '2222-2222'
+          email: nome@email.com
+      summary: Retorno de Contatos
+
+    Sucesso:
+      value:
+        status: 200
+        mensagem: ... com sucesso
+      summary: Retorno de objeto de sucesso
+  
+    Erro404:
+      value:
+        timestamp: '2020-01-01T12:00:00.000Z'
+        status: 404
+        erro: Not Found
+        message: ... não encontrado
+        path: /exemplo
+        method: GET
+      summary: Erro 404
+      
+    Erro500:
+      value:
+        timestamp: '2020-01-01T12:00:00.000Z'
+        status: 500
+        erro: Internal Server Erro
+        message: Não foi possível ...
+        path: /exemplo
+        method: GET
+      summary: Erro 500
+
+paths:
+  /contatos:
+    post:
+      tags:
+        - Contato
+      summary: Cria um novo contato
+      description: Cria um novo contato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contato'
+            examples:
+              Contato:
+                $ref: '#/components/examples/NovoContato'
+      responses:
+        '201':
+          description: Retorna o contato criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contato'
+              examples:
+                Contato:
+                  $ref: '#/components/examples/RetornoContato'
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                Erro:
+                  $ref: '#/components/examples/Erro500'
+
+    get:
+      tags:
+        - Contato
+      summary: Busca todos os contatos
+      description: Busca todos os contatos
+      responses:
+        '200':
+          description: Retorna uma lista de contatos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contato'
+              examples:
+                Contatos:
+                  $ref: '#/components/examples/RetornoContatos'
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                Erro:
+                  $ref: '#/components/examples/Erro500'
+
+  /contatos/{id}:
+    put:
+      tags:
+        - Contato
+      summary: Atualiza contato existente
+      description: Atualiza contato existente
+      parameters:
+        - name: id
+          description: id do contato
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contato'
+            examples:
+              Contato:
+                $ref: '#/components/examples/NovoContato'
+      responses:
+        '200':
+          description: Contato alterado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sucesso'
+              examples:
+                Sucesso:
+                  $ref: '#/components/examples/Sucesso'
+        '404':
+          description: Contado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                Erro:
+                  $ref: '#/components/examples/Erro404'
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                Erro:
+                  $ref: '#/components/examples/Erro500'
+
+    delete:
+      tags:
+        - Contato
+      summary: Exclui um contato
+      description: Excluí um contato
+      parameters:
+        - name: id
+          description: id do contato
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int
+      responses:
+        '200':
+          description: Contato excluído com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sucesso'
+              examples:
+                Sucesso:
+                  $ref: '#/components/examples/Sucesso'
+        '404':
+          description: Contado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                Erro:
+                  $ref: '#/components/examples/Erro404'
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Erro'
+              examples:
+                Erro:
+                  $ref: '#/components/examples/Erro500'

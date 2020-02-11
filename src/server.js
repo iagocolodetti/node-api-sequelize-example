@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-const swaggerJSDoc = require('swagger-jsdoc');
+const { join } = require('path');
 const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 const db = require('./database');
 const routes = require('./routes');
-const swaggerConfig = require('./config/swagger');
 
 db.connect();
 
@@ -13,8 +13,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerConfig)));
+const swaggerDocument = YAML.load(join(__dirname, './configs/swagger.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(routes);
 
-app.listen(8080);
+app.listen(8080, () => {
+    console.log('Servidor rodando na porta: 8080');
+});
