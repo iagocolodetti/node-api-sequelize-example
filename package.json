@@ -3,6 +3,7 @@
     "name": "node-api-sequelize-example",
     "version": "1.2",
     "main": "server.js",
+	"license": "MIT",
     "scripts": {
         "dev": "nodemon src/server.js"
     },
